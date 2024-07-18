@@ -7,6 +7,14 @@ function Home() {
 
   useEffect(() => {
     const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8080"; // Fallback to localhost
+
+    console.log(
+      apiUrl,
+      "es el valor de apiUrl",
+      process.env.REACT_APP_API_URL,
+      "es el valor de la variable de entorno"
+    );
+
     fetch(`${apiUrl}/api/data`)
       .then((response) => {
         if (response.ok) {
