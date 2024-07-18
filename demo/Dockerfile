@@ -7,8 +7,9 @@ RUN mvn clean package -DskipTests
 
 # Fase de construcción para el frontend
 FROM node:16 AS frontend-builder
-WORKDIR /build
-COPY frontend/package.json frontend/package-lock.json ./
+WORKDIR /app
+COPY frontend/package.json ./
+COPY frontend/package-lock.json ./
 RUN npm install
 COPY frontend/ ./
 RUN npm run build
