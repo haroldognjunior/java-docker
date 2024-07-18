@@ -12,13 +12,14 @@ COPY frontend/package.json frontend/package-lock.json ./
 RUN npm install
 COPY frontend/ ./
 RUN npm run build
-RUN mkdir -p ../src/main/resources/static  # Crear el directorio antes de mover los archivos
+# Crear el directorio antes de intentar mover los archivos, asegurando el orden correcto
+RUN mkdir -p ../src/main/resources/static
 RUN mv build/* ../src/main/resources/static/
 
 # Fase de ejecución
 FROM openjdk:17-slim
 WORKDIR /app
 COPY --from=backend-builder /app/target/*.war ./app.war
-COPY --from=frontend-builder /app/src/main/resources/static /app/static  # Asegurarse de copiar desde la ubicación correcta
+COPY --from=frontend-builder /app/src/main/resources/static /app/static
 EXPOSE 8080
 CMD ["java", "-jar", "app.war"]
