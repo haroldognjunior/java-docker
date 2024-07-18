@@ -1,12 +1,23 @@
-# Fase de construcción
-FROM maven:3.8.4-openjdk-17-slim AS build
-WORKDIR /app
+# Fase de construcción para el backend
+FROM maven:3.8.4-openjdk-17-slim AS backend-builder
+WORKDIR /build
 COPY pom.xml .
 COPY src ./src
 RUN mvn clean package -DskipTests
 
+# Fase de construcción para el frontend
+FROM node:16 AS frontend-builder
+WORKDIR /build
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm install
+COPY frontend/ ./
+RUN npm run build
+
 # Fase de ejecución
 FROM openjdk:17-slim
-COPY --from=build /app/target/*.war app.war
+WORKDIR /app
+COPY --from=backend-builder /build/target/*.war ./app.war
+# Copiar los archivos estáticos construidos en una ubicación accesible por Spring Boot
+COPY --from=frontend-builder /build/build /app/static
 EXPOSE 8080
 CMD ["java", "-jar", "app.war"]
