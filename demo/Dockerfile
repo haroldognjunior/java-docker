@@ -40,6 +40,3 @@ EXPOSE 8080
 ENV REACT_APP_API_URL=${REACT_APP_API_URL}
 
 CMD ["java", "-jar", "app.war"]
-
-# Cambio temporal para invalidar la caché
-# RUN echo "Rebuild $(date)" > /dev/null

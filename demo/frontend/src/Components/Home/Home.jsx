@@ -6,7 +6,8 @@ function Home() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8080"; // Fallback to localhost
+    const apiUrl =
+      process.env.REACT_APP_API_URL || "https://java-docker-of4y.onrender.com"; // Fallback to localhost
 
     console.log(
       apiUrl,
