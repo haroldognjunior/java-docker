@@ -18,6 +18,7 @@ COPY frontend/package.json frontend/package-lock.json ./
 RUN npm install
 COPY frontend/ ./
 
+# Asegúrate de que la variable de entorno se pase correctamente durante la construcción
 ARG REACT_APP_API_URL
 ENV REACT_APP_API_URL=$REACT_APP_API_URL
 
@@ -34,4 +35,8 @@ WORKDIR /app
 COPY --from=backend-builder /app/target/*.war ./app.war
 COPY --from=frontend-builder /app/src/main/resources/static ./static
 EXPOSE 8080
+
+# Asegura la variable de entorno en tiempo de ejecución
+ENV REACT_APP_API_URL=${REACT_APP_API_URL}
+
 CMD ["java", "-jar", "app.war"]
